@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>credit Card</title>
+    <link rel="stylesheet" href="css/master.css">
+</head>
+
+<body>
+    <main class="row">
+        <div class="block">
+            <div class="box">
+                <div class="card row">
+                    <span class="border"></span>
+                    <img src="img/chip.png" alt="">
+                    <img src="img/visa.png" alt="">
+                    <span data-sp="number" id="outnumber" class="span">
+                        #### #### #### ####
+                    </span>
+                    <div class="info row">
+                        <div class="name row span" data-sp="name">
+                            <span class="titr">card holder</span>
+                            <span id="outname">full name</span>
+                        </div>
+                        <div class="date row span" data-sp="date">
+                            <span class="titr">expires</span>
+                            <span id="outmonth">mm</span>
+                            <span class="sl">/</span>
+                            <span id="outyear">yy</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card2 row">
+                    <span class=""></span>
+                    <div class="row">
+                        <span class="cvv">cvv</span>
+                        <span id="outcvv"></span>
+                        <img src="img/visa.png" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="inputs row">
+            <input data-info="number" id="innumber" type="text" placeholder="Card Number">
+            <input data-info="name" id="inname" type="text" placeholder="Card Holder">
+            <input data-info="date" id="inmonth" type="text" placeholder="Month">
+            <input data-info="date" id="inyear" type="text" placeholder="Year">
+            <input id="incvv" type="text" placeholder="CVV">
+            <button>Submit</button>
+        </div>
+    </main>
+</body>
+<script>
+
+    // let block = document.getElementsByClassName('block')[0]
+    // let tb = block.computedStyleMap().get('top')
+    // console.log(tb);
+    randCard()
+    function randCard() {
+        let card1 = document.getElementsByClassName('card')[0]
+        let card2 = document.getElementsByClassName('card2')[0]
+        let randCard = Math.floor((Math.random() * 13) + 1)
+        card1.style.backgroundImage = 'url(img/' + randCard + '.jpeg)'
+        card2.style.backgroundImage = 'url(img/' + randCard + '.jpeg)'
+        
+    }
+
+    let innumber = document.getElementById('innumber')
+    let outnumber = document.getElementById("outnumber")
+    let inname = document.getElementById('inname')
+    let outname = document.getElementById('outname')
+    let incvv = document.getElementById('incvv')
+    let outcvv = document.getElementById('outcvv')
+    let inmonth = document.getElementById('inmonth')
+    let outmonth = document.getElementById('outmonth')
+    let inyear = document.getElementById('inyear')
+    let outyear = document.getElementById('outyear')
+
+    let sum = ''
+    let year = ''
+    let Month = ''
+
+
+    inmonth.addEventListener('input', (e) => {
+        Month = (e.target.value)
+        outmonth.innerHTML = Month
+        if (Month.length == 2) {
+            e.target.nextElementSibling.focus()
+        }
+    })
+    inyear.addEventListener('input', (e) => {
+        year = (e.target.value)
+        outyear.innerHTML = year
+        if (year.length == 2) {
+            e.target.nextElementSibling.focus()
+        }
+    })
+    incvv.addEventListener('input', (e) => {
+        outcvv.innerHTML = (e.target.value)
+    })
+    incvv.addEventListener('focusin', (e) => {
+        document.getElementsByClassName('box')[0].style.transform = 'perspective(800px) rotateY(180deg)'
+
+    })
+    incvv.addEventListener('focusout', (e) => {
+        document.getElementsByClassName('box')[0].style.transform = 'perspective(800px) rotateY(0deg)'
+
+    })
+
+    innumber.addEventListener('input', writeNumber)
+    inname.addEventListener('input', writeName)
+
+
+
+    function writeNumber(e) {
+        let data = e.data
+        let num = e.target
+        if (data == null) {
+            outnumber.innerHTML = (num.value)
+        } else {
+            sum = (num.value)
+            switch (sum.length) {
+                case 4: sum = sum + ' - '; break;
+                case 11: sum = sum + ' - '; break;
+                case 18: sum = sum + ' - '; break;
+                case 25: inname.focus(); break;
+            }
+            innumber.value = sum
+            outnumber.innerHTML = sum
+        }
+    }
+    function writeName(e) {
+        outname.innerHTML = (e.target.value)
+    }
+
+    let inputs = document.querySelectorAll('.inputs> input')
+    let spans = document.querySelectorAll('.span')
+
+
+    inputs.forEach((value) => {
+        // let info = value.getAttribute('data-info')
+        value.addEventListener('focusin', () => {
+            spans.forEach((val) => {
+                // let sp = val.getAttribute('data-sp')
+
+                if (value.getAttribute('data-info') == val.getAttribute('data-sp')) {
+
+                    let styles = val.getBoundingClientRect()
+                    let t = styles.top + window.scrollY
+                    let l = styles.left + window.scrollX
+                    let w = styles.width + 5
+                    let h = styles.height + 5
+                    let br = document.getElementsByClassName('border')[0]
+                    // console.log(styles);
+                    // console.log(x);
+
+                    br.style.top = t-105 + 'px'
+                    br.style.left = l - 460 + 'px'
+                    br.style.width = w + 'px'
+                    br.style.height = h + 'px'
+                    br.style.opacity = '1'
+                }
+
+                value.addEventListener('focusout', () => {
+                    let br = document.getElementsByClassName('border')[0]
+                    br.style.top = 0 + 'px'
+                    br.style.left = 0 + 'px'
+                    br.style.width = 100 + '%'
+                    br.style.height = 100 + '%'
+                    br.style.opacity = '0'
+                })
+            })
+        })
+
+
+    })
+    spans.forEach((val) => {
+
+    })
+
+
+</script>
+
+</html>
